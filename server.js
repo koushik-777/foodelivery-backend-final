@@ -47,3 +47,19 @@ mongoose.connect(process.env.MONGO_URI)
     console.error('Error connecting to database:', err);
   });
 
+// In server.js
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('Connected to database!');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Error connecting to database:', err);
+  });
+
+
+
+
+
