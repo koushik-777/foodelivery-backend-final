@@ -4,10 +4,13 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Middleware - make sure these are in the right order
-app.use(cors());
+app.use(cors({
+  origin: '*',  // In development; tighten this in production
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 // Error handler for JSON parsing
 app.use((err, req, res, next) => {
@@ -35,31 +38,14 @@ app.get('/', (req, res) => {
 
 const restaurantRoutes = require('./routes/restaurant');
 app.use('/api/restaurant', restaurantRoutes);
+app.use('/api/restaurants', restaurantRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Connected to database!');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
   })
   .catch(err => {
     console.error('Error connecting to database:', err);
   });
 
-// In server.js
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('Connected to database!');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('Error connecting to database:', err);
-  });
-
-
-
-
-
+module.exports = app;
